@@ -27,8 +27,44 @@
     <string name="cursor_size">Cursor size</string>
     <string name="cursor_color">Cursor color</string>
     <string name="show_cursor">Show cursor</string>
+    <string name="show_eye_line">Show eye line</string>
+    <string name="eye_line_color">Eye line color</string>
+    <string name="eye_line_length">Eye line length</string>
+    <string name="gaze_smoothing">Gaze smoothing</string>
+    <string name="blink_duration_threshold">Blink duration threshold</string>
+    <string name="debug_logging">Debug logging</string>
+    <string name="print_logcat">Print logcat</string>
     <string name="calibration">Calibration</string>
     <string name="eye_control_camera_permission">Camera permission is required for eye control</string>
+    
+    <!-- Iris app settings (advanced) -->
+    <string name="x_movement_multiplier">X Movement Multiplier</string>
+    <string name="y_movement_multiplier">Y Movement Multiplier</string>
+    <string name="eye_position_x_effect">Eye Position X Effect</string>
+    <string name="eye_position_x_multiplier">Eye Position X Multiplier</string>
+    <string name="eye_position_y_effect">Eye Position Y Effect</string>
+    <string name="eye_position_y_multiplier">Eye Position Y Multiplier</string>
+    <string name="distance_x_multiplier">Distance X Multiplier</string>
+    <string name="distance_y_multiplier">Distance Y Multiplier</string>
+    <string name="blink_threshold">Blink Threshold (Full Blink/Tap)</string>
+    <string name="use_one_eye">Use One Eye Detection</string>
+    <string name="half_blink_accel_threshold">Half-Blink Acceleration (Drag)</string>
+    <string name="click_delay_threshold">Click Delay Threshold (ms)</string>
+    <string name="cursor_smoothing">Cursor Smoothing</string>
+    <string name="cursor_update_interval">Update Interval (ms)</string>
+    <string name="cursor_movement_duration">Movement Duration (ms)</string>
+    <string name="click_color">Click Color</string>
+    <string name="drag_color">Drag Color</string>
+    <string name="show_live_preview">Show Live Camera Preview</string>
+    <string name="screen_off_tracking">Screen Off Tracking</string>
+    <string name="show_camera_preview">Show Camera Preview</string>
+    <string name="movement_multipliers">Movement Multipliers</string>
+    <string name="eye_position_effects">Eye Position Effects</string>
+    <string name="distance_based_range">Distance-Based Range</string>
+    <string name="blink_detection">Blink Detection</string>
+    <string name="cursor_update_settings">Cursor Update Settings</string>
+    <string name="cursor_theming">Cursor Theming</string>
+    <string name="camera_preview">Camera Preview</string>
     <!--
         Haven't found some strings? There's more at
         https://github.com/FossifyOrg/Commons/tree/master/commons/src/main/res

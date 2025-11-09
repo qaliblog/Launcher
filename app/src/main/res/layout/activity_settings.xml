@@ -71,11 +71,6 @@
                 android:layout_height="wrap_content"
                 android:text="@string/general_settings" />
 
-            <org.fossify.commons.views.PurchaseThankYouItem
-                android:id="@+id/settings_purchase_thank_you_holder"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"/>
-
             <RelativeLayout
                 android:id="@+id/settings_use_english_holder"
                 style="@style/SettingsHolderSwitchStyle"
@@ -450,6 +445,126 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="@string/show_cursor" />
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/settings_show_eye_line_holder"
+                style="@style/SettingsHolderSwitchStyle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/ripple_background">
+
+                <org.fossify.commons.views.MyMaterialSwitch
+                    android:id="@+id/settings_show_eye_line"
+                    style="@style/SettingsSwitchStyle"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/show_eye_line" />
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/settings_eye_line_length_holder"
+                style="@style/SettingsHolderTextViewOneLinerStyle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/ripple_background">
+
+                <org.fossify.commons.views.MyTextView
+                    android:id="@+id/settings_eye_line_length_label"
+                    style="@style/SettingsTextLabelStyle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/eye_line_length" />
+
+                <org.fossify.commons.views.MyTextView
+                    android:id="@+id/settings_eye_line_length"
+                    style="@style/SettingsTextValueStyle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/settings_eye_line_length_label"
+                    tools:text="200" />
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/settings_gaze_smoothing_holder"
+                style="@style/SettingsHolderTextViewOneLinerStyle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/ripple_background">
+
+                <org.fossify.commons.views.MyTextView
+                    android:id="@+id/settings_gaze_smoothing_label"
+                    style="@style/SettingsTextLabelStyle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/gaze_smoothing" />
+
+                <org.fossify.commons.views.MyTextView
+                    android:id="@+id/settings_gaze_smoothing"
+                    style="@style/SettingsTextValueStyle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/settings_gaze_smoothing_label"
+                    tools:text="0.7" />
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/settings_blink_duration_threshold_holder"
+                style="@style/SettingsHolderTextViewOneLinerStyle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/ripple_background">
+
+                <org.fossify.commons.views.MyTextView
+                    android:id="@+id/settings_blink_duration_threshold_label"
+                    style="@style/SettingsTextLabelStyle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/blink_duration_threshold" />
+
+                <org.fossify.commons.views.MyTextView
+                    android:id="@+id/settings_blink_duration_threshold"
+                    style="@style/SettingsTextValueStyle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/settings_blink_duration_threshold_label"
+                    tools:text="300" />
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/settings_debug_logging_holder"
+                style="@style/SettingsHolderSwitchStyle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/ripple_background">
+
+                <org.fossify.commons.views.MyMaterialSwitch
+                    android:id="@+id/settings_debug_logging"
+                    style="@style/SettingsSwitchStyle"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/debug_logging" />
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/settings_print_logcat_holder"
+                style="@style/SettingsHolderTextViewOneLinerStyle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/ripple_background">
+
+                <org.fossify.commons.views.MyTextView
+                    android:id="@+id/settings_print_logcat_label"
+                    style="@style/SettingsTextLabelStyle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/print_logcat" />
 
             </RelativeLayout>
         </LinearLayout>

@@ -8,6 +8,7 @@ plugins {
     alias(libs.plugins.kotlinAndroid)
     alias(libs.plugins.ksp)
     alias(libs.plugins.detekt)
+    alias(libs.plugins.download)
 }
 
 val keystorePropertiesFile: File = rootProject.file("keystore.properties")
@@ -22,6 +23,12 @@ fun hasSigningVars(): Boolean {
             && providers.environmentVariable("SIGNING_STORE_FILE").orNull != null
             && providers.environmentVariable("SIGNING_STORE_PASSWORD").orNull != null
 }
+
+// Set asset directory for MediaPipe model downloads
+project.extra["ASSET_DIR"] = projectDir.toString() + "/src/main/assets"
+
+// Apply download tasks for MediaPipe models
+apply(from = "download_tasks.gradle")
 
 android {
     compileSdk = project.libs.versions.app.build.compileSDKVersion.get().toInt()
@@ -66,10 +73,12 @@ android {
     buildTypes {
         debug {
             applicationIdSuffix = ".debug"
+            resValue("string", "app_name", "vision")
         }
         release {
             isMinifyEnabled = true
             isShrinkResources = true
+            resValue("string", "app_name", "vision")
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
@@ -145,6 +154,7 @@ dependencies {
     
     // MediaPipe for eye tracking
     implementation(libs.mediapipe.face.detection)
+    implementation(libs.mediapipe.face.mesh)
     
     // CameraX for camera access
     implementation(libs.androidx.camera.core)

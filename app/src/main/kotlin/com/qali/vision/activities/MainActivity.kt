@@ -92,9 +92,21 @@ import com.qali.vision.interfaces.ItemMenuListener
 import com.qali.vision.models.AppLauncher
 import com.qali.vision.models.HiddenIcon
 import com.qali.vision.models.HomeScreenGridItem
-import com.qali.vision.managers.EyeControlManager
+import com.qali.vision.managers.FaceLandmarkerHelper
+import com.qali.vision.managers.EyeTracker
+import com.qali.vision.managers.EyeBlinkDetector
+import com.qali.vision.managers.TrackingCalculator
+import com.qali.vision.managers.LogcatManager
 import com.qali.vision.receivers.LockDeviceAdminReceiver
-import com.qali.vision.views.CursorView
+import com.qali.vision.views.OverlayView
+import com.qali.vision.views.PointerView
+import androidx.camera.core.Camera
+import androidx.camera.core.CameraSelector
+import androidx.camera.core.ImageAnalysis
+import androidx.camera.lifecycle.ProcessCameraProvider
+import androidx.core.content.ContextCompat
+import com.google.mediapipe.tasks.vision.core.RunningMode
+import java.util.concurrent.Executors
 import kotlin.math.abs
 import kotlin.math.max
 import kotlin.math.min
@@ -121,7 +133,17 @@ class MainActivity : SimpleActivity(), FlingListener {
 
     private lateinit var mDetector: GestureDetectorCompat
     private val binding by viewBinding(ActivityMainBinding::inflate)
-    private var eyeControlManager: EyeControlManager? = null
+    // Eye control components
+    private var cameraProvider: ProcessCameraProvider? = null
+    private var camera: Camera? = null
+    private var imageAnalysis: ImageAnalysis? = null
+    private lateinit var faceLandmarkerHelper: FaceLandmarkerHelper
+    private lateinit var eyeTracker: EyeTracker
+    private lateinit var trackingCalculator: TrackingCalculator
+    private lateinit var eyeBlinkDetector: EyeBlinkDetector
+    private val backgroundExecutor = Executors.newSingleThreadExecutor()
+    private var overlayView: OverlayView? = null
+    private var pointerView: PointerView? = null
 
     companion object {
         private var mLastUpEvent = 0L
@@ -135,7 +157,7 @@ class MainActivity : SimpleActivity(), FlingListener {
 
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
-        appLaunched(BuildConfig.APPLICATION_ID)
+        // appLaunched(BuildConfig.APPLICATION_ID)  // Disabled to remove fake version alert
         setupEdgeToEdge(
             padTopSystem = listOf(binding.widgetsFragment.root),
             padBottomImeAndSystem = listOf(
@@ -181,16 +203,211 @@ class MainActivity : SimpleActivity(), FlingListener {
     }
     
     private fun setupEyeControl() {
-        val cursorView = findViewById<CursorView>(R.id.cursor_view)
+        overlayView = findViewById(R.id.overlay_view)
+        pointerView = findViewById(R.id.pointer_view)
+        
         if (config.eyeControlEnabled) {
-            cursorView?.visibility = android.view.View.VISIBLE
-            // Note: EyeControlManager initialization would go here
-            // For now, this is a placeholder - actual MediaPipe integration needs refinement
+            overlayView?.visibility = android.view.View.VISIBLE
+            pointerView?.visibility = android.view.View.VISIBLE
+            
+            // Initialize eye tracking components
+            eyeTracker = EyeTracker(resources.displayMetrics, config.useOneEyeDetection)
+            trackingCalculator = TrackingCalculator(config, resources.displayMetrics)
+            eyeBlinkDetector = EyeBlinkDetector(
+                initialBlinkThreshold = config.blinkThreshold,
+                initialHalfBlinkAccelThreshold = config.halfBlinkAccelThreshold,
+                initialClickDelayThreshold = config.clickDelayThreshold
+            )
+            
+            // Set up blink detector callbacks
+            eyeBlinkDetector.onTap = { point ->
+                runOnUiThread {
+                    pointerView?.indicateClick()
+                    overlayView?.indicateClick()
+                    performClickAt(point.x, point.y)
+                    LogcatManager.addLog("Tap detected at (${point.x}, ${point.y})", "MainActivity")
+                }
+            }
+            
+            eyeBlinkDetector.onDragStart = { point ->
+                runOnUiThread {
+                    pointerView?.indicateDragStart()
+                    LogcatManager.addLog("Drag start at (${point.x}, ${point.y})", "MainActivity")
+                }
+            }
+            
+            eyeBlinkDetector.onDragEnd = {
+                runOnUiThread {
+                    pointerView?.indicateDragEnd()
+                    LogcatManager.addLog("Drag end", "MainActivity")
+                }
+            }
+            
+            // Set up FaceLandmarkerHelper
+            faceLandmarkerHelper = FaceLandmarkerHelper(
+                context = this,
+                runningMode = RunningMode.LIVE_STREAM,
+                faceLandmarkerHelperListener = object : FaceLandmarkerHelper.LandmarkerListener {
+                    override fun onError(error: String, errorCode: Int) {
+                        LogcatManager.addLog("FaceLandmarker error: $error", "MainActivity")
+                    }
+
+                    override fun onResults(resultBundle: FaceLandmarkerHelper.ResultBundle) {
+                        val landmarks = resultBundle.result.faceLandmarks().firstOrNull()
+                        if (landmarks != null) {
+                            // Track eyes
+                            eyeTracker.setUseOneEye(config.useOneEyeDetection)
+                            val trackingResult = eyeTracker.trackEyes(landmarks)
+                            
+                            // Calculate adjusted position
+                            val (adjustedX, adjustedY) = trackingCalculator.calculateAdjustedPosition(trackingResult)
+                            
+                            // Update blink detector thresholds
+                            eyeBlinkDetector.setBlinkThreshold(config.blinkThreshold)
+                            eyeBlinkDetector.setHalfBlinkAccelThreshold(config.halfBlinkAccelThreshold)
+                            eyeBlinkDetector.setClickDelayThreshold(config.clickDelayThreshold)
+                            
+                            // Process blink detection
+                            val eyelidLandmarks = if (config.useOneEyeDetection) {
+                                trackingResult.rightEyelidLandmarks ?: trackingResult.leftEyelidLandmarks
+                            } else {
+                                when {
+                                    trackingResult.leftEyelidLandmarks != null && trackingResult.rightEyelidLandmarks != null -> {
+                                        EyeTracker.EyelidLandmarks(
+                                            upperLidY = (trackingResult.leftEyelidLandmarks!!.upperLidY + trackingResult.rightEyelidLandmarks!!.upperLidY) / 2f,
+                                            lowerLidY = (trackingResult.leftEyelidLandmarks!!.lowerLidY + trackingResult.rightEyelidLandmarks!!.lowerLidY) / 2f
+                                        )
+                                    }
+                                    else -> trackingResult.leftEyelidLandmarks ?: trackingResult.rightEyelidLandmarks
+                                }
+                            }
+                            
+                            eyelidLandmarks?.let {
+                                eyeBlinkDetector.processEyelidLandmarks(
+                                    upperLidY = it.upperLidY,
+                                    lowerLidY = it.lowerLidY,
+                                    clickPosition = android.graphics.PointF(adjustedX, adjustedY)
+                                )
+                            }
+                            
+                            // Update pointer position
+                            runOnUiThread {
+                                pointerView?.let { view ->
+                                    view.x = adjustedX - view.width / 2
+                                    view.y = adjustedY - view.height / 2
+                                }
+                                
+                                overlayView?.setPointerPosition(adjustedX, adjustedY)
+                                overlayView?.setResults(
+                                    resultBundle.result,
+                                    resultBundle.inputImageHeight,
+                                    resultBundle.inputImageWidth,
+                                    RunningMode.LIVE_STREAM
+                                )
+                            }
+                        }
+                    }
+
+                    override fun onEmpty() {
+                        runOnUiThread {
+                            overlayView?.clear()
+                        }
+                    }
+                }
+            )
+            
+            overlayView?.setEyeTracker(eyeTracker)
+            pointerView?.setCursorColor(config.cursorColor)
+            pointerView?.setClickColor(config.clickColor)
+            pointerView?.setDragColor(config.dragColor)
+            
+            // Start camera
+            startCamera()
+            
+            LogcatManager.addLog("Eye control enabled", "MainActivity")
         } else {
-            cursorView?.visibility = android.view.View.GONE
-            eyeControlManager?.stop()
-            eyeControlManager = null
+            overlayView?.visibility = android.view.View.GONE
+            pointerView?.visibility = android.view.View.GONE
+            stopCamera()
+            LogcatManager.addLog("Eye control disabled", "MainActivity")
         }
+    }
+    
+    private fun startCamera() {
+        val cameraProviderFuture = ProcessCameraProvider.getInstance(this)
+        
+        cameraProviderFuture.addListener({
+            try {
+                cameraProvider = cameraProviderFuture.get()
+                bindCameraUseCases()
+            } catch (e: Exception) {
+                LogcatManager.addLog("Error starting camera: ${e.message}", "MainActivity")
+            }
+        }, ContextCompat.getMainExecutor(this))
+    }
+    
+    private fun bindCameraUseCases() {
+        val cameraProvider = cameraProvider ?: return
+        
+        val cameraSelector = CameraSelector.DEFAULT_FRONT_CAMERA
+        
+        imageAnalysis = ImageAnalysis.Builder()
+            .setBackpressureStrategy(ImageAnalysis.STRATEGY_KEEP_ONLY_LATEST)
+            .setOutputImageFormat(ImageAnalysis.OUTPUT_IMAGE_FORMAT_RGBA_8888)
+            .build()
+            .also {
+                it.setAnalyzer(backgroundExecutor) { imageProxy ->
+                    if (config.eyeControlEnabled && ::faceLandmarkerHelper.isInitialized) {
+                        faceLandmarkerHelper.detectLiveStream(imageProxy, true)
+                    } else {
+                        imageProxy.close()
+                    }
+                }
+            }
+        
+        try {
+            cameraProvider.unbindAll()
+            camera = cameraProvider.bindToLifecycle(
+                this,
+                cameraSelector,
+                imageAnalysis
+            )
+        } catch (e: Exception) {
+            LogcatManager.addLog("Error binding camera: ${e.message}", "MainActivity")
+        }
+    }
+    
+    private fun stopCamera() {
+        cameraProvider?.unbindAll()
+        imageAnalysis?.clearAnalyzer()
+        camera = null
+    }
+    
+    private fun performClickAt(x: Float, y: Float) {
+        val downTime = System.currentTimeMillis()
+        val eventTime = System.currentTimeMillis()
+        
+        val downEvent = MotionEvent.obtain(
+            downTime,
+            eventTime,
+            MotionEvent.ACTION_DOWN,
+            x,
+            y,
+            0
+        )
+        dispatchTouchEvent(downEvent)
+        downEvent.recycle()
+        
+        val upEvent = MotionEvent.obtain(
+            downTime,
+            eventTime + 50,
+            MotionEvent.ACTION_UP,
+            x,
+            y,
+            0
+        )
+        dispatchTouchEvent(upEvent)
+        upEvent.recycle()
     }
 
     override fun onNewIntent(intent: Intent) {
@@ -280,12 +497,15 @@ class MainActivity : SimpleActivity(), FlingListener {
     override fun onPause() {
         super.onPause()
         wasJustPaused = true
-        eyeControlManager?.stop()
+        stopCamera()
     }
     
     override fun onDestroy() {
         super.onDestroy()
-        eyeControlManager?.stop()
+        backgroundExecutor.shutdown()
+        if (::faceLandmarkerHelper.isInitialized) {
+            faceLandmarkerHelper.clearFaceLandmarker()
+        }
     }
 
     override fun onBackPressedCompat(): Boolean {

@@ -8,7 +8,7 @@ import android.os.Bundle
 import org.fossify.commons.dialogs.RadioGroupDialog
 import org.fossify.commons.extensions.beVisibleIf
 import org.fossify.commons.extensions.getProperPrimaryColor
-import org.fossify.commons.extensions.launchMoreAppsFromUsIntent
+import org.fossify.commons.extensions.toast
 import org.fossify.commons.extensions.updateTextColors
 import org.fossify.commons.extensions.viewBinding
 import org.fossify.commons.helpers.NavigationIcon
@@ -73,7 +73,6 @@ class SettingsActivity : SimpleActivity() {
         binding.settingsToolbar.setOnMenuItemClickListener { menuItem ->
             when (menuItem.itemId) {
                 R.id.about -> launchAbout()
-                R.id.more_apps_from_us -> launchMoreAppsFromUsIntent()
                 else -> return@setOnMenuItemClickListener false
             }
             return@setOnMenuItemClickListener true
@@ -81,10 +80,7 @@ class SettingsActivity : SimpleActivity() {
     }
 
     private fun refreshMenuItems() {
-        binding.settingsToolbar.menu.apply {
-            findItem(R.id.more_apps_from_us).isVisible =
-                !resources.getBoolean(org.fossify.commons.R.bool.hide_google_relations)
-        }
+        // Removed social links menu items
     }
 
     private fun setupCustomizeColors() {
@@ -264,6 +260,12 @@ class SettingsActivity : SimpleActivity() {
         setupHalfBlinkDragThreshold()
         setupCursorSize()
         setupShowCursor()
+        setupShowEyeLine()
+        setupEyeLineLength()
+        setupGazeSmoothing()
+        setupBlinkDurationThreshold()
+        setupDebugLogging()
+        setupPrintLogcat()
     }
 
     private fun setupEnableEyeControl() {
@@ -394,24 +396,116 @@ class SettingsActivity : SimpleActivity() {
         }
     }
 
+    private fun setupShowEyeLine() {
+        binding.settingsShowEyeLine.isChecked = config.showEyeLine
+        binding.settingsShowEyeLineHolder.setOnClickListener {
+            binding.settingsShowEyeLine.toggle()
+            config.showEyeLine = binding.settingsShowEyeLine.isChecked
+        }
+    }
+
+    private fun setupEyeLineLength() {
+        val currentLength = config.eyeLineLength
+        binding.settingsEyeLineLength.text = "$currentLength"
+        binding.settingsEyeLineLengthHolder.setOnClickListener {
+            val items = ArrayList<RadioItem>()
+            for (i in 50..500 step 50) {
+                items.add(RadioItem(id = i, title = "$i"))
+            }
+            RadioGroupDialog(this, items, currentLength) {
+                val newLength = it as Int
+                if (currentLength != newLength) {
+                    config.eyeLineLength = newLength
+                    setupEyeLineLength()
+                }
+            }
+        }
+    }
+
+    private fun setupGazeSmoothing() {
+        val currentSmoothing = config.gazeSmoothing
+        binding.settingsGazeSmoothing.text = String.format("%.2f", currentSmoothing)
+        binding.settingsGazeSmoothingHolder.setOnClickListener {
+            val items = ArrayList<RadioItem>()
+            for (i in 1..20) {
+                val value = 0.1f + (i - 1) * 0.05f // Range from 0.1 to 1.0
+                items.add(RadioItem(id = i, title = String.format("%.2f", value)))
+            }
+            val selectedIndex = ((currentSmoothing - 0.1f) / 0.05f).toInt().coerceIn(0, 19)
+            RadioGroupDialog(this, items, selectedIndex + 1) {
+                val newSmoothing = 0.1f + ((it as Int) - 1) * 0.05f
+                if (kotlin.math.abs(currentSmoothing - newSmoothing) > 0.01f) {
+                    config.gazeSmoothing = newSmoothing
+                    setupGazeSmoothing()
+                }
+            }
+        }
+    }
+
+    private fun setupBlinkDurationThreshold() {
+        val currentThreshold = config.blinkDurationThreshold
+        binding.settingsBlinkDurationThreshold.text = "$currentThreshold ms"
+        binding.settingsBlinkDurationThresholdHolder.setOnClickListener {
+            val items = ArrayList<RadioItem>()
+            for (i in 100..1000 step 50) {
+                items.add(RadioItem(id = i, title = "$i ms"))
+            }
+            RadioGroupDialog(this, items, currentThreshold) {
+                val newThreshold = it as Int
+                if (currentThreshold != newThreshold) {
+                    config.blinkDurationThreshold = newThreshold
+                    setupBlinkDurationThreshold()
+                }
+            }
+        }
+    }
+
+    private fun setupDebugLogging() {
+        binding.settingsDebugLogging.isChecked = config.debugLogging
+        binding.settingsDebugLoggingHolder.setOnClickListener {
+            binding.settingsDebugLogging.toggle()
+            config.debugLogging = binding.settingsDebugLogging.isChecked
+        }
+    }
+
+    private fun setupPrintLogcat() {
+        binding.settingsPrintLogcatHolder.setOnClickListener {
+            printLogcat()
+        }
+    }
+
+    private fun printLogcat() {
+        try {
+            val process = Runtime.getRuntime().exec("logcat -d")
+            val reader = java.io.BufferedReader(java.io.InputStreamReader(process.inputStream))
+            val log = StringBuilder()
+            var line: String?
+            while (reader.readLine().also { line = it } != null) {
+                log.append(line).append("\n")
+            }
+            reader.close()
+            
+            // Filter for relevant tags
+            val filteredLog = log.toString().lines()
+                .filter { it.contains("EyeControlManager") || it.contains("CursorView") || it.contains("vision") }
+                .joinToString("\n")
+            
+            android.util.Log.d("VisionLogcat", "=== Eye Control Logcat ===")
+            android.util.Log.d("VisionLogcat", filteredLog)
+            android.util.Log.d("VisionLogcat", "=== End Logcat ===")
+            
+            toast("Logcat printed to logcat. Filter by 'VisionLogcat' tag.")
+        } catch (e: Exception) {
+            android.util.Log.e("SettingsActivity", "Error printing logcat", e)
+            toast("Error printing logcat: ${e.message}")
+        }
+    }
+
     private fun launchAbout() {
         val licenses = 0L
         val faqItems = ArrayList<FAQItem>()
 
-        if (!resources.getBoolean(org.fossify.commons.R.bool.hide_google_relations)) {
-            faqItems.add(
-                FAQItem(
-                    title = org.fossify.commons.R.string.faq_2_title_commons,
-                    text = org.fossify.commons.R.string.faq_2_text_commons
-                )
-            )
-            faqItems.add(
-                FAQItem(
-                    title = org.fossify.commons.R.string.faq_6_title_commons,
-                    text = org.fossify.commons.R.string.faq_6_text_commons
-                )
-            )
-        }
+        // Removed social links and donation references
 
         startAboutActivity(
             appNameId = R.string.app_name,
