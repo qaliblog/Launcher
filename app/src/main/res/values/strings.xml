@@ -65,6 +65,9 @@
     <string name="cursor_update_settings">Cursor Update Settings</string>
     <string name="cursor_theming">Cursor Theming</string>
     <string name="camera_preview">Camera Preview</string>
+    <string name="enable_click">Enable Click</string>
+    <string name="enable_drag">Enable Drag</string>
+    <string name="click_drag_settings">Click &amp; Drag Settings</string>
     <!--
         Haven't found some strings? There's more at
         https://github.com/FossifyOrg/Commons/tree/master/commons/src/main/res

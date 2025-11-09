@@ -28,6 +28,10 @@ const val DEBUG_LOGGING = "debug_logging"
 const val GAZE_SMOOTHING = "gaze_smoothing"
 const val BLINK_DURATION_THRESHOLD = "blink_duration_threshold"
 
+// Enable/disable click and drag
+const val ENABLE_CLICK = "enable_click"
+const val ENABLE_DRAG = "enable_drag"
+
 // Movement multipliers
 const val X_MOVEMENT_MULTIPLIER = "x_movement_multiplier"
 const val Y_MOVEMENT_MULTIPLIER = "y_movement_multiplier"

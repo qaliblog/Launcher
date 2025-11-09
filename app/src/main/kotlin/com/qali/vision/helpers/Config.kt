@@ -181,4 +181,13 @@ class Config(context: Context) : BaseConfig(context) {
     var screenOffTracking: Boolean
         get() = prefs.getBoolean(SCREEN_OFF_TRACKING, true)
         set(screenOffTracking) = prefs.edit().putBoolean(SCREEN_OFF_TRACKING, screenOffTracking).apply()
+    
+    // Enable/disable click and drag
+    var enableClick: Boolean
+        get() = prefs.getBoolean(ENABLE_CLICK, true)
+        set(enableClick) = prefs.edit().putBoolean(ENABLE_CLICK, enableClick).apply()
+    
+    var enableDrag: Boolean
+        get() = prefs.getBoolean(ENABLE_DRAG, true)
+        set(enableDrag) = prefs.edit().putBoolean(ENABLE_DRAG, enableDrag).apply()
 }

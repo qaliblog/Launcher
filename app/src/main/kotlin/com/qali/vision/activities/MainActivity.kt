@@ -221,25 +221,31 @@ class MainActivity : SimpleActivity(), FlingListener {
             
             // Set up blink detector callbacks
             eyeBlinkDetector.onTap = { point ->
-                runOnUiThread {
-                    pointerView?.indicateClick()
-                    overlayView?.indicateClick()
-                    performClickAt(point.x, point.y)
-                    LogcatManager.addLog("Tap detected at (${point.x}, ${point.y})", "MainActivity")
+                if (config.enableClick) { // Only trigger if click is enabled
+                    runOnUiThread {
+                        pointerView?.indicateClick()
+                        overlayView?.indicateClick()
+                        performClickAt(point.x, point.y)
+                        LogcatManager.addLog("Tap detected at (${point.x}, ${point.y})", "MainActivity")
+                    }
                 }
             }
             
             eyeBlinkDetector.onDragStart = { point ->
-                runOnUiThread {
-                    pointerView?.indicateDragStart()
-                    LogcatManager.addLog("Drag start at (${point.x}, ${point.y})", "MainActivity")
+                if (config.enableDrag) { // Only trigger if drag is enabled
+                    runOnUiThread {
+                        pointerView?.indicateDragStart()
+                        LogcatManager.addLog("Drag start at (${point.x}, ${point.y})", "MainActivity")
+                    }
                 }
             }
             
             eyeBlinkDetector.onDragEnd = {
-                runOnUiThread {
-                    pointerView?.indicateDragEnd()
-                    LogcatManager.addLog("Drag end", "MainActivity")
+                if (config.enableDrag) { // Only trigger if drag is enabled
+                    runOnUiThread {
+                        pointerView?.indicateDragEnd()
+                        LogcatManager.addLog("Drag end", "MainActivity")
+                    }
                 }
             }
             
@@ -317,9 +323,14 @@ class MainActivity : SimpleActivity(), FlingListener {
             )
             
             overlayView?.setEyeTracker(eyeTracker)
+            overlayView?.setShowEyeLines(config.showEyeLine) // Apply eye line visibility
+            overlayView?.setShowPointer(config.showCursor) // Apply pointer visibility
             pointerView?.setCursorColor(config.cursorColor)
             pointerView?.setClickColor(config.clickColor)
             pointerView?.setDragColor(config.dragColor)
+            
+            // Control pointerView visibility based on showCursor setting
+            pointerView?.visibility = if (config.showCursor) android.view.View.VISIBLE else android.view.View.GONE
             
             // Start camera
             startCamera()

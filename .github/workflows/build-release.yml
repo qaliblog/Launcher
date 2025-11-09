@@ -38,7 +38,7 @@ jobs:
       - name: Grant execute permission for gradlew
         run: chmod +x gradlew
 
-      - name: Build Release APK
+      - name: Build Release APK (Debug Signing)
         id: build
         run: |
           FLAVOR="${{ github.event.inputs.build_flavor || 'core' }}"
@@ -46,18 +46,18 @@ jobs:
             # Extract flavor from tag if available
             FLAVOR="core"
           fi
-          echo "Building $FLAVOR release APK..."
-          ./gradlew assemble${FLAVOR^}Release --no-daemon
+          echo "Building $FLAVOR debug APK (installable without keys)..."
+          ./gradlew assemble${FLAVOR^}Debug --no-daemon
           echo "flavor=$FLAVOR" >> $GITHUB_OUTPUT
 
       - name: Find APK
         id: find_apk
         run: |
           FLAVOR="${{ steps.build.outputs.flavor || 'core' }}"
-          APK_PATH=$(find app/build/outputs/apk/${FLAVOR}/release -name "*.apk" 2>/dev/null | head -n 1)
+          APK_PATH=$(find app/build/outputs/apk/${FLAVOR}/debug -name "*.apk" 2>/dev/null | head -n 1)
           if [ -z "$APK_PATH" ]; then
-            # Fallback to any release APK
-            APK_PATH=$(find app/build/outputs/apk -name "*release*.apk" | head -n 1)
+            # Fallback to any debug APK
+            APK_PATH=$(find app/build/outputs/apk -name "*debug*.apk" | head -n 1)
           fi
           if [ -z "$APK_PATH" ]; then
             echo "Error: No APK found!"

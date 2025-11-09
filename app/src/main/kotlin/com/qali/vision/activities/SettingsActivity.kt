@@ -254,6 +254,8 @@ class SettingsActivity : SimpleActivity() {
 
     private fun setupEyeControlSettings() {
         setupEnableEyeControl()
+        setupEnableClick()
+        setupEnableDrag()
         setupEyeControlSensitivity()
         setupEyeControlSmoothing()
         setupHalfBlinkClickThreshold()
@@ -385,6 +387,42 @@ class SettingsActivity : SimpleActivity() {
                     setupCursorSize()
                 }
             }
+        }
+    }
+
+    private fun setupEnableClick() {
+        try {
+            val enableClickSwitch = findViewById<com.google.android.material.switchmaterial.MaterialSwitch>(
+                resources.getIdentifier("settings_enable_click", "id", packageName)
+            )
+            enableClickSwitch?.isChecked = config.enableClick
+            val enableClickHolder = findViewById<View>(
+                resources.getIdentifier("settings_enable_click_holder", "id", packageName)
+            )
+            enableClickHolder?.setOnClickListener {
+                enableClickSwitch?.toggle()
+                config.enableClick = enableClickSwitch?.isChecked ?: true
+            }
+        } catch (e: Exception) {
+            // Layout might not have this field yet
+        }
+    }
+
+    private fun setupEnableDrag() {
+        try {
+            val enableDragSwitch = findViewById<com.google.android.material.switchmaterial.MaterialSwitch>(
+                resources.getIdentifier("settings_enable_drag", "id", packageName)
+            )
+            enableDragSwitch?.isChecked = config.enableDrag
+            val enableDragHolder = findViewById<View>(
+                resources.getIdentifier("settings_enable_drag_holder", "id", packageName)
+            )
+            enableDragHolder?.setOnClickListener {
+                enableDragSwitch?.toggle()
+                config.enableDrag = enableDragSwitch?.isChecked ?: true
+            }
+        } catch (e: Exception) {
+            // Layout might not have this field yet
         }
     }
 

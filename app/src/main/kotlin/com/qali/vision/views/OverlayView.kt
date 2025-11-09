@@ -20,10 +20,23 @@ class OverlayView @JvmOverloads constructor(
     defStyleAttr: Int = 0
 ) : View(context, attrs, defStyleAttr) {
     
+    private var showEyeLines = true // Control eye line visibility
+    private var showPointer = true // Control pointer visibility
+    
     init {
         // Don't intercept touch events - let them pass through to views behind
         isClickable = false
         isFocusable = false
+    }
+    
+    fun setShowEyeLines(show: Boolean) {
+        showEyeLines = show
+        invalidate()
+    }
+    
+    fun setShowPointer(show: Boolean) {
+        showPointer = show
+        invalidate()
     }
     
     override fun onTouchEvent(event: MotionEvent?): Boolean {
@@ -191,6 +204,8 @@ class OverlayView @JvmOverloads constructor(
     }
     
     private fun drawPointer(canvas: Canvas, x: Float, y: Float) {
+        if (!showPointer) return // Respect showPointer setting
+        
         val currentColor = if (isClicking && System.currentTimeMillis() < clickEndTime) clickColor else cursorColor
         
         val pointerPaint = Paint().apply {
@@ -222,6 +237,7 @@ class OverlayView @JvmOverloads constructor(
         offsetX: Float,
         offsetY: Float
     ) {
+        if (!showEyeLines) return // Respect showEyeLines setting
         val tracker = eyeTracker ?: return
         
         // Get eye indices
