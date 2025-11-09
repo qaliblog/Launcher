@@ -6,12 +6,17 @@ import android.graphics.Color
 import android.graphics.Paint
 import android.os.Handler
 import android.os.Looper
+import android.util.AttributeSet
 import android.view.View
 
 /**
  * Custom view that draws a pointer/cursor
  */
-class PointerView(context: Context) : View(context) {
+class PointerView @JvmOverloads constructor(
+    context: Context,
+    attrs: AttributeSet? = null,
+    defStyleAttr: Int = 0
+) : View(context, attrs, defStyleAttr) {
     
     private var isClicking = false
     private var clickEndTime = 0L
