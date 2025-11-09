@@ -54,10 +54,12 @@ class Config(context: Context) : BaseConfig(context) {
     var halfBlinkClickThreshold: Float
         get() = prefs.getFloat(HALF_BLINK_CLICK_THRESHOLD, 0.3f)
         set(halfBlinkClickThreshold) = prefs.edit().putFloat(HALF_BLINK_CLICK_THRESHOLD, halfBlinkClickThreshold).apply()
+        // Range: 0.05 to 1.0 (increased from default 0.3)
 
     var halfBlinkDragThreshold: Float
         get() = prefs.getFloat(HALF_BLINK_DRAG_THRESHOLD, 0.4f)
         set(halfBlinkDragThreshold) = prefs.edit().putFloat(HALF_BLINK_DRAG_THRESHOLD, halfBlinkDragThreshold).apply()
+        // Range: 0.05 to 1.0 (increased from default 0.4)
 
     var cursorSize: Int
         get() = prefs.getInt(CURSOR_SIZE, 20)

@@ -1,0 +1,80 @@
+name: Build Debug APK
+
+on:
+  push:
+    branches:
+      - main
+      - master
+      - develop
+  pull_request:
+    branches:
+      - main
+      - master
+      - develop
+  workflow_dispatch:
+
+jobs:
+  build:
+    name: Build Vision Debug APK
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+          cache: 'gradle'
+
+      - name: Set up Android SDK
+        uses: android-actions/setup-android@v3
+
+      - name: Grant execute permission for gradlew
+        run: chmod +x gradlew
+        working-directory: Launcher
+
+      - name: Build Debug APK
+        run: ./gradlew assembleCoreDebug --no-daemon
+        working-directory: Launcher
+
+      - name: Find APK
+        id: find_apk
+        run: |
+          APK_PATH=$(find Launcher/app/build/outputs/apk/core/debug -name "*.apk" 2>/dev/null | head -n 1)
+          if [ -z "$APK_PATH" ]; then
+            # Fallback to any debug APK
+            APK_PATH=$(find Launcher/app/build/outputs/apk -name "*debug*.apk" | head -n 1)
+          fi
+          if [ -z "$APK_PATH" ]; then
+            echo "Error: No APK found!"
+            find Launcher/app/build/outputs -name "*.apk" || true
+            exit 1
+          fi
+          echo "apk_path=$APK_PATH" >> $GITHUB_OUTPUT
+          echo "Found APK: $APK_PATH"
+          ls -lh "$APK_PATH"
+
+      - name: Upload APK artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: vision-debug-apk
+          path: ${{ steps.find_apk.outputs.apk_path }}
+          retention-days: 30
+
+      - name: Get APK info
+        run: |
+          APK_PATH="${{ steps.find_apk.outputs.apk_path }}"
+          APK_SIZE=$(du -h "$APK_PATH" | cut -f1)
+          APK_NAME=$(basename "$APK_PATH")
+          echo "## Build Summary" >> $GITHUB_STEP_SUMMARY
+          echo "- **APK Name:** $APK_NAME" >> $GITHUB_STEP_SUMMARY
+          echo "- **APK Size:** $APK_SIZE" >> $GITHUB_STEP_SUMMARY
+          echo "- **APK Path:** $APK_PATH" >> $GITHUB_STEP_SUMMARY
+          echo ""
+          echo "APK Size: $APK_SIZE"
+          echo "APK Path: $APK_PATH"
+          echo "APK Name: $APK_NAME"
+

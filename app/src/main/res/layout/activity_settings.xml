@@ -289,6 +289,169 @@
                     tools:text="3" />
 
             </RelativeLayout>
+
+            <include
+                android:id="@+id/settings_home_screen_divider"
+                layout="@layout/divider" />
+
+            <TextView
+                android:id="@+id/settings_eye_control_label"
+                style="@style/SettingsSectionLabelStyle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/eye_control_settings" />
+
+            <RelativeLayout
+                android:id="@+id/settings_enable_eye_control_holder"
+                style="@style/SettingsHolderSwitchStyle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/ripple_background">
+
+                <org.fossify.commons.views.MyMaterialSwitch
+                    android:id="@+id/settings_enable_eye_control"
+                    style="@style/SettingsSwitchStyle"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/enable_eye_control" />
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/settings_eye_control_sensitivity_holder"
+                style="@style/SettingsHolderTextViewOneLinerStyle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/ripple_background">
+
+                <org.fossify.commons.views.MyTextView
+                    android:id="@+id/settings_eye_control_sensitivity_label"
+                    style="@style/SettingsTextLabelStyle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/eye_control_sensitivity" />
+
+                <org.fossify.commons.views.MyTextView
+                    android:id="@+id/settings_eye_control_sensitivity"
+                    style="@style/SettingsTextValueStyle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/settings_eye_control_sensitivity_label"
+                    tools:text="1.0" />
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/settings_eye_control_smoothing_holder"
+                style="@style/SettingsHolderTextViewOneLinerStyle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/ripple_background">
+
+                <org.fossify.commons.views.MyTextView
+                    android:id="@+id/settings_eye_control_smoothing_label"
+                    style="@style/SettingsTextLabelStyle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/eye_control_smoothing" />
+
+                <org.fossify.commons.views.MyTextView
+                    android:id="@+id/settings_eye_control_smoothing"
+                    style="@style/SettingsTextValueStyle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/settings_eye_control_smoothing_label"
+                    tools:text="0.5" />
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/settings_half_blink_click_threshold_holder"
+                style="@style/SettingsHolderTextViewOneLinerStyle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/ripple_background">
+
+                <org.fossify.commons.views.MyTextView
+                    android:id="@+id/settings_half_blink_click_threshold_label"
+                    style="@style/SettingsTextLabelStyle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/half_blink_click_threshold" />
+
+                <org.fossify.commons.views.MyTextView
+                    android:id="@+id/settings_half_blink_click_threshold"
+                    style="@style/SettingsTextValueStyle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/settings_half_blink_click_threshold_label"
+                    tools:text="0.3" />
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/settings_half_blink_drag_threshold_holder"
+                style="@style/SettingsHolderTextViewOneLinerStyle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/ripple_background">
+
+                <org.fossify.commons.views.MyTextView
+                    android:id="@+id/settings_half_blink_drag_threshold_label"
+                    style="@style/SettingsTextLabelStyle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/half_blink_drag_threshold" />
+
+                <org.fossify.commons.views.MyTextView
+                    android:id="@+id/settings_half_blink_drag_threshold"
+                    style="@style/SettingsTextValueStyle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/settings_half_blink_drag_threshold_label"
+                    tools:text="0.4" />
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/settings_cursor_size_holder"
+                style="@style/SettingsHolderTextViewOneLinerStyle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/ripple_background">
+
+                <org.fossify.commons.views.MyTextView
+                    android:id="@+id/settings_cursor_size_label"
+                    style="@style/SettingsTextLabelStyle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/cursor_size" />
+
+                <org.fossify.commons.views.MyTextView
+                    android:id="@+id/settings_cursor_size"
+                    style="@style/SettingsTextValueStyle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/settings_cursor_size_label"
+                    tools:text="20" />
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/settings_show_cursor_holder"
+                style="@style/SettingsHolderSwitchStyle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/ripple_background">
+
+                <org.fossify.commons.views.MyMaterialSwitch
+                    android:id="@+id/settings_show_cursor"
+                    style="@style/SettingsSwitchStyle"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/show_cursor" />
+
+            </RelativeLayout>
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

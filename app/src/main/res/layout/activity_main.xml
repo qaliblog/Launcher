@@ -24,4 +24,10 @@
         android:layout_height="1dp"
         android:visibility="gone" />
 
+    <com.qali.vision.views.CursorView
+        android:id="@+id/cursor_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone" />
+
 </RelativeLayout>

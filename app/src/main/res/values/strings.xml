@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_launcher_name">Launcher</string>
+    <string name="app_launcher_name">vision</string>
     <string name="launcher_settings">Launcher Settings</string>
     <string name="app_info">App info</string>
     <string name="touch_hold_widget">Long press the widget and drag it on your home screen</string>
@@ -18,6 +18,17 @@
     <string name="double_tap_to_lock">Double tap to lock screen</string>
     <string name="lock_device_admin_hint">To enable the double tap to lock screen feature, you need to grant admin permission. Note that the app cannot be uninstalled until this permission is removed.</string>
     <string name="lock_device_admin_warning">Deactivating admin permission will disable the double tap to lock screen feature.</string>
+    <string name="eye_control_settings">Eye Control</string>
+    <string name="enable_eye_control">Enable eye control</string>
+    <string name="eye_control_sensitivity">Sensitivity</string>
+    <string name="eye_control_smoothing">Smoothing</string>
+    <string name="half_blink_click_threshold">Half blink click threshold</string>
+    <string name="half_blink_drag_threshold">Half blink drag threshold</string>
+    <string name="cursor_size">Cursor size</string>
+    <string name="cursor_color">Cursor color</string>
+    <string name="show_cursor">Show cursor</string>
+    <string name="calibration">Calibration</string>
+    <string name="eye_control_camera_permission">Camera permission is required for eye control</string>
     <!--
         Haven't found some strings? There's more at
         https://github.com/FossifyOrg/Commons/tree/master/commons/src/main/res

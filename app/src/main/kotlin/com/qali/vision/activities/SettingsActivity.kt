@@ -333,9 +333,9 @@ class SettingsActivity : SimpleActivity() {
         binding.settingsHalfBlinkClickThreshold.text = String.format("%.2f", currentThreshold)
         binding.settingsHalfBlinkClickThresholdHolder.setOnClickListener {
             val items = ArrayList<RadioItem>()
-            // Increased range: 0.1 to 1.0 (was 0.3 default, now range is 0.1-1.0)
+            // Increased range: 0.05 to 1.0 (was 0.3 default, now range is 0.05-1.0)
             for (i in 1..20) {
-                val value = i / 20.0f
+                val value = 0.05f + (i - 1) * 0.05f // Range from 0.05 to 1.0
                 items.add(RadioItem(id = i, title = String.format("%.2f", value)))
             }
             RadioGroupDialog(this, items, (currentThreshold * 20).toInt()) {
