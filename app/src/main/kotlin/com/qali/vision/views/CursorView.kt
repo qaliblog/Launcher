@@ -17,7 +17,7 @@ class CursorView @JvmOverloads constructor(
     private var cursorPosition = PointF(0f, 0f)
     private val paint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
         style = Paint.Style.FILL
-        color = config.cursorColor
+        color = context.config.cursorColor
     }
 
     fun updatePosition(x: Float, y: Float) {
@@ -29,9 +29,9 @@ class CursorView @JvmOverloads constructor(
     override fun onDraw(canvas: Canvas) {
         super.onDraw(canvas)
         
-        if (!config.showCursor) return
+        if (!context.config.showCursor) return
         
-        val size = config.cursorSize.toFloat()
+        val size = context.config.cursorSize.toFloat()
         val radius = size / 2f
         
         // Draw cursor as a circle
