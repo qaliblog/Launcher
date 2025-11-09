@@ -268,6 +268,11 @@ class SettingsActivity : SimpleActivity() {
         setupBlinkDurationThreshold()
         setupDebugLogging()
         setupPrintLogcat()
+        
+        // Advanced settings with increment/decrement buttons
+        setupMovementMultipliers()
+        setupEyePositionEffects()
+        setupDistanceMultipliers()
     }
 
     private fun setupEnableEyeControl() {
@@ -552,5 +557,253 @@ class SettingsActivity : SimpleActivity() {
             faqItems = faqItems,
             showFAQBeforeMail = true
         )
+    }
+    
+    // Advanced Settings with Increment/Decrement Adjusters
+    
+    private fun setupMovementMultipliers() {
+        // X Movement Multiplier
+        val xMovementValue = findViewById<android.widget.EditText>(R.id.x_movement_value)
+        val xMovementMinus = findViewById<android.widget.Button>(R.id.x_movement_minus)
+        val xMovementPlus = findViewById<android.widget.Button>(R.id.x_movement_plus)
+        
+        xMovementValue?.setText(String.format("%.2f", config.xMovementMultiplier))
+        
+        setupValueEditorDirect(xMovementValue,
+            { config.xMovementMultiplier },
+            { config.xMovementMultiplier = it })
+        
+        xMovementMinus?.setOnClickListener {
+            xMovementValue?.clearFocus()
+            val newValue = (config.xMovementMultiplier - 0.1f).coerceIn(-5f, 5f)
+            config.xMovementMultiplier = newValue
+            xMovementValue?.setText(String.format("%.2f", newValue))
+        }
+        
+        xMovementPlus?.setOnClickListener {
+            xMovementValue?.clearFocus()
+            val newValue = (config.xMovementMultiplier + 0.1f).coerceIn(-5f, 5f)
+            config.xMovementMultiplier = newValue
+            xMovementValue?.setText(String.format("%.2f", newValue))
+        }
+        
+        // Y Movement Multiplier
+        val yMovementValue = findViewById<android.widget.EditText>(R.id.y_movement_value)
+        val yMovementMinus = findViewById<android.widget.Button>(R.id.y_movement_minus)
+        val yMovementPlus = findViewById<android.widget.Button>(R.id.y_movement_plus)
+        
+        yMovementValue?.setText(String.format("%.2f", config.yMovementMultiplier))
+        
+        setupValueEditorDirect(yMovementValue,
+            { config.yMovementMultiplier },
+            { config.yMovementMultiplier = it })
+        
+        yMovementMinus?.setOnClickListener {
+            yMovementValue?.clearFocus()
+            val newValue = (config.yMovementMultiplier - 0.1f).coerceIn(-5f, 5f)
+            config.yMovementMultiplier = newValue
+            yMovementValue?.setText(String.format("%.2f", newValue))
+        }
+        
+        yMovementPlus?.setOnClickListener {
+            yMovementValue?.clearFocus()
+            val newValue = (config.yMovementMultiplier + 0.1f).coerceIn(-5f, 5f)
+            config.yMovementMultiplier = newValue
+            yMovementValue?.setText(String.format("%.2f", newValue))
+        }
+    }
+    
+    private fun setupEyePositionEffects() {
+        // Eye Position X Effect
+        val eyePosXEffectValue = findViewById<android.widget.EditText>(R.id.eye_pos_x_effect_value)
+        val eyePosXEffectMinus = findViewById<android.widget.Button>(R.id.eye_pos_x_effect_minus)
+        val eyePosXEffectPlus = findViewById<android.widget.Button>(R.id.eye_pos_x_effect_plus)
+        
+        eyePosXEffectValue?.setText(String.format("%.2f", config.eyePositionXEffect))
+        
+        setupValueEditorDirect(eyePosXEffectValue,
+            { config.eyePositionXEffect },
+            { config.eyePositionXEffect = it })
+        
+        eyePosXEffectMinus?.setOnClickListener {
+            eyePosXEffectValue?.clearFocus()
+            val newValue = (config.eyePositionXEffect - 0.1f).coerceIn(-5f, 5f)
+            config.eyePositionXEffect = newValue
+            eyePosXEffectValue?.setText(String.format("%.2f", newValue))
+        }
+        
+        eyePosXEffectPlus?.setOnClickListener {
+            eyePosXEffectValue?.clearFocus()
+            val newValue = (config.eyePositionXEffect + 0.1f).coerceIn(-5f, 5f)
+            config.eyePositionXEffect = newValue
+            eyePosXEffectValue?.setText(String.format("%.2f", newValue))
+        }
+        
+        // Eye Position X Multiplier
+        val eyePosXMultValue = findViewById<android.widget.EditText>(R.id.eye_pos_x_mult_value)
+        val eyePosXMultMinus = findViewById<android.widget.Button>(R.id.eye_pos_x_mult_minus)
+        val eyePosXMultPlus = findViewById<android.widget.Button>(R.id.eye_pos_x_mult_plus)
+        
+        eyePosXMultValue?.setText(String.format("%.2f", config.eyePositionXMultiplier))
+        
+        setupValueEditorDirect(eyePosXMultValue,
+            { config.eyePositionXMultiplier },
+            { config.eyePositionXMultiplier = it })
+        
+        eyePosXMultMinus?.setOnClickListener {
+            eyePosXMultValue?.clearFocus()
+            val newValue = (config.eyePositionXMultiplier - 0.1f).coerceIn(-5f, 5f)
+            config.eyePositionXMultiplier = newValue
+            eyePosXMultValue?.setText(String.format("%.2f", newValue))
+        }
+        
+        eyePosXMultPlus?.setOnClickListener {
+            eyePosXMultValue?.clearFocus()
+            val newValue = (config.eyePositionXMultiplier + 0.1f).coerceIn(-5f, 5f)
+            config.eyePositionXMultiplier = newValue
+            eyePosXMultValue?.setText(String.format("%.2f", newValue))
+        }
+        
+        // Eye Position Y Effect
+        val eyePosYEffectValue = findViewById<android.widget.EditText>(R.id.eye_pos_y_effect_value)
+        val eyePosYEffectMinus = findViewById<android.widget.Button>(R.id.eye_pos_y_effect_minus)
+        val eyePosYEffectPlus = findViewById<android.widget.Button>(R.id.eye_pos_y_effect_plus)
+        
+        eyePosYEffectValue?.setText(String.format("%.2f", config.eyePositionYEffect))
+        
+        setupValueEditorDirect(eyePosYEffectValue,
+            { config.eyePositionYEffect },
+            { config.eyePositionYEffect = it })
+        
+        eyePosYEffectMinus?.setOnClickListener {
+            eyePosYEffectValue?.clearFocus()
+            val newValue = (config.eyePositionYEffect - 0.1f).coerceIn(-5f, 5f)
+            config.eyePositionYEffect = newValue
+            eyePosYEffectValue?.setText(String.format("%.2f", newValue))
+        }
+        
+        eyePosYEffectPlus?.setOnClickListener {
+            eyePosYEffectValue?.clearFocus()
+            val newValue = (config.eyePositionYEffect + 0.1f).coerceIn(-5f, 5f)
+            config.eyePositionYEffect = newValue
+            eyePosYEffectValue?.setText(String.format("%.2f", newValue))
+        }
+        
+        // Eye Position Y Multiplier
+        val eyePosYMultValue = findViewById<android.widget.EditText>(R.id.eye_pos_y_mult_value)
+        val eyePosYMultMinus = findViewById<android.widget.Button>(R.id.eye_pos_y_mult_minus)
+        val eyePosYMultPlus = findViewById<android.widget.Button>(R.id.eye_pos_y_mult_plus)
+        
+        eyePosYMultValue?.setText(String.format("%.2f", config.eyePositionYMultiplier))
+        
+        setupValueEditorDirect(eyePosYMultValue,
+            { config.eyePositionYMultiplier },
+            { config.eyePositionYMultiplier = it })
+        
+        eyePosYMultMinus?.setOnClickListener {
+            eyePosYMultValue?.clearFocus()
+            val newValue = (config.eyePositionYMultiplier - 0.1f).coerceIn(-5f, 5f)
+            config.eyePositionYMultiplier = newValue
+            eyePosYMultValue?.setText(String.format("%.2f", newValue))
+        }
+        
+        eyePosYMultPlus?.setOnClickListener {
+            eyePosYMultValue?.clearFocus()
+            val newValue = (config.eyePositionYMultiplier + 0.1f).coerceIn(-5f, 5f)
+            config.eyePositionYMultiplier = newValue
+            eyePosYMultValue?.setText(String.format("%.2f", newValue))
+        }
+    }
+    
+    private fun setupDistanceMultipliers() {
+        // Distance X Multiplier
+        val distanceXValue = findViewById<android.widget.EditText>(R.id.distance_x_value)
+        val distanceXMinus = findViewById<android.widget.Button>(R.id.distance_x_minus)
+        val distanceXPlus = findViewById<android.widget.Button>(R.id.distance_x_plus)
+        
+        distanceXValue?.setText(String.format("%.2f", config.distanceXMultiplier))
+        
+        setupValueEditorDirect(distanceXValue,
+            { config.distanceXMultiplier },
+            { config.distanceXMultiplier = it })
+        
+        distanceXMinus?.setOnClickListener {
+            distanceXValue?.clearFocus()
+            val newValue = (config.distanceXMultiplier - 0.1f).coerceIn(-5f, 5f)
+            config.distanceXMultiplier = newValue
+            distanceXValue?.setText(String.format("%.2f", newValue))
+        }
+        
+        distanceXPlus?.setOnClickListener {
+            distanceXValue?.clearFocus()
+            val newValue = (config.distanceXMultiplier + 0.1f).coerceIn(-5f, 5f)
+            config.distanceXMultiplier = newValue
+            distanceXValue?.setText(String.format("%.2f", newValue))
+        }
+        
+        // Distance Y Multiplier
+        val distanceYValue = findViewById<android.widget.EditText>(R.id.distance_y_value)
+        val distanceYMinus = findViewById<android.widget.Button>(R.id.distance_y_minus)
+        val distanceYPlus = findViewById<android.widget.Button>(R.id.distance_y_plus)
+        
+        distanceYValue?.setText(String.format("%.2f", config.distanceYMultiplier))
+        
+        setupValueEditorDirect(distanceYValue,
+            { config.distanceYMultiplier },
+            { config.distanceYMultiplier = it })
+        
+        distanceYMinus?.setOnClickListener {
+            distanceYValue?.clearFocus()
+            val newValue = (config.distanceYMultiplier - 0.1f).coerceIn(-5f, 5f)
+            config.distanceYMultiplier = newValue
+            distanceYValue?.setText(String.format("%.2f", newValue))
+        }
+        
+        distanceYPlus?.setOnClickListener {
+            distanceYValue?.clearFocus()
+            val newValue = (config.distanceYMultiplier + 0.1f).coerceIn(-5f, 5f)
+            config.distanceYMultiplier = newValue
+            distanceYValue?.setText(String.format("%.2f", newValue))
+        }
+    }
+    
+    private fun setupValueEditorDirect(
+        editText: android.widget.EditText?,
+        getter: () -> Float,
+        setter: (Float) -> Unit
+    ) {
+        editText?.apply {
+            setOnEditorActionListener { _, _, _ ->
+                try {
+                    val value = text.toString().toFloatOrNull()
+                    if (value != null) {
+                        setter(value)
+                        clearFocus()
+                        true
+                    } else {
+                        setText(String.format("%.2f", getter()))
+                        false
+                    }
+                } catch (e: Exception) {
+                    setText(String.format("%.2f", getter()))
+                    false
+                }
+            }
+            
+            setOnFocusChangeListener { _, hasFocus ->
+                if (!hasFocus) {
+                    try {
+                        val value = text.toString().toFloatOrNull()
+                        if (value != null) {
+                            setter(value)
+                        } else {
+                            setText(String.format("%.2f", getter()))
+                        }
+                    } catch (e: Exception) {
+                        setText(String.format("%.2f", getter()))
+                    }
+                }
+            }
+        }
     }
 }

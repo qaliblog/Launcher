@@ -567,6 +567,394 @@
                     android:text="@string/print_logcat" />
 
             </RelativeLayout>
+
+            <!-- Advanced Eye Control Settings -->
+            <TextView
+                android:id="@+id/settings_movement_multipliers_label"
+                style="@style/SettingsSectionLabelStyle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:text="@string/movement_multipliers" />
+
+            <!-- X Movement Multiplier -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:padding="12dp"
+                android:background="@drawable/ripple_background">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="@string/x_movement_multiplier"
+                    android:textSize="14sp" />
+
+                <EditText
+                    android:id="@+id/x_movement_value"
+                    android:layout_width="100dp"
+                    android:layout_height="48dp"
+                    android:text="1.0"
+                    android:textSize="14sp"
+                    android:inputType="numberDecimal|numberSigned"
+                    android:gravity="center"
+                    android:padding="8dp"
+                    android:background="@android:drawable/edit_text"
+                    android:selectAllOnFocus="true" />
+
+                <Button
+                    android:id="@+id/x_movement_minus"
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:text="-"
+                    android:textSize="18sp"
+                    android:layout_marginStart="8dp" />
+
+                <Button
+                    android:id="@+id/x_movement_plus"
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:text="+"
+                    android:textSize="18sp"
+                    android:layout_marginStart="4dp" />
+            </LinearLayout>
+
+            <!-- Y Movement Multiplier -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:padding="12dp"
+                android:background="@drawable/ripple_background">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="@string/y_movement_multiplier"
+                    android:textSize="14sp" />
+
+                <EditText
+                    android:id="@+id/y_movement_value"
+                    android:layout_width="100dp"
+                    android:layout_height="48dp"
+                    android:text="1.0"
+                    android:textSize="14sp"
+                    android:inputType="numberDecimal|numberSigned"
+                    android:gravity="center"
+                    android:padding="8dp"
+                    android:background="@android:drawable/edit_text"
+                    android:selectAllOnFocus="true" />
+
+                <Button
+                    android:id="@+id/y_movement_minus"
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:text="-"
+                    android:textSize="18sp"
+                    android:layout_marginStart="8dp" />
+
+                <Button
+                    android:id="@+id/y_movement_plus"
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:text="+"
+                    android:textSize="18sp"
+                    android:layout_marginStart="4dp" />
+            </LinearLayout>
+
+            <!-- Eye Position Effects -->
+            <TextView
+                android:id="@+id/settings_eye_position_effects_label"
+                style="@style/SettingsSectionLabelStyle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:text="@string/eye_position_effects" />
+
+            <!-- Eye Position X Effect -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:padding="12dp"
+                android:background="@drawable/ripple_background">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="@string/eye_position_x_effect"
+                    android:textSize="14sp" />
+
+                <EditText
+                    android:id="@+id/eye_pos_x_effect_value"
+                    android:layout_width="100dp"
+                    android:layout_height="48dp"
+                    android:text="0.0"
+                    android:textSize="14sp"
+                    android:inputType="numberDecimal|numberSigned"
+                    android:gravity="center"
+                    android:padding="8dp"
+                    android:background="@android:drawable/edit_text"
+                    android:selectAllOnFocus="true" />
+
+                <Button
+                    android:id="@+id/eye_pos_x_effect_minus"
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:text="-"
+                    android:textSize="18sp"
+                    android:layout_marginStart="8dp" />
+
+                <Button
+                    android:id="@+id/eye_pos_x_effect_plus"
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:text="+"
+                    android:textSize="18sp"
+                    android:layout_marginStart="4dp" />
+            </LinearLayout>
+
+            <!-- Eye Position X Multiplier -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:padding="12dp"
+                android:background="@drawable/ripple_background">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="@string/eye_position_x_multiplier"
+                    android:textSize="14sp" />
+
+                <EditText
+                    android:id="@+id/eye_pos_x_mult_value"
+                    android:layout_width="100dp"
+                    android:layout_height="48dp"
+                    android:text="1.0"
+                    android:textSize="14sp"
+                    android:inputType="numberDecimal|numberSigned"
+                    android:gravity="center"
+                    android:padding="8dp"
+                    android:background="@android:drawable/edit_text"
+                    android:selectAllOnFocus="true" />
+
+                <Button
+                    android:id="@+id/eye_pos_x_mult_minus"
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:text="-"
+                    android:textSize="18sp"
+                    android:layout_marginStart="8dp" />
+
+                <Button
+                    android:id="@+id/eye_pos_x_mult_plus"
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:text="+"
+                    android:textSize="18sp"
+                    android:layout_marginStart="4dp" />
+            </LinearLayout>
+
+            <!-- Eye Position Y Effect -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:padding="12dp"
+                android:background="@drawable/ripple_background">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="@string/eye_position_y_effect"
+                    android:textSize="14sp" />
+
+                <EditText
+                    android:id="@+id/eye_pos_y_effect_value"
+                    android:layout_width="100dp"
+                    android:layout_height="48dp"
+                    android:text="0.0"
+                    android:textSize="14sp"
+                    android:inputType="numberDecimal|numberSigned"
+                    android:gravity="center"
+                    android:padding="8dp"
+                    android:background="@android:drawable/edit_text"
+                    android:selectAllOnFocus="true" />
+
+                <Button
+                    android:id="@+id/eye_pos_y_effect_minus"
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:text="-"
+                    android:textSize="18sp"
+                    android:layout_marginStart="8dp" />
+
+                <Button
+                    android:id="@+id/eye_pos_y_effect_plus"
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:text="+"
+                    android:textSize="18sp"
+                    android:layout_marginStart="4dp" />
+            </LinearLayout>
+
+            <!-- Eye Position Y Multiplier -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:padding="12dp"
+                android:background="@drawable/ripple_background">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="@string/eye_position_y_multiplier"
+                    android:textSize="14sp" />
+
+                <EditText
+                    android:id="@+id/eye_pos_y_mult_value"
+                    android:layout_width="100dp"
+                    android:layout_height="48dp"
+                    android:text="1.0"
+                    android:textSize="14sp"
+                    android:inputType="numberDecimal|numberSigned"
+                    android:gravity="center"
+                    android:padding="8dp"
+                    android:background="@android:drawable/edit_text"
+                    android:selectAllOnFocus="true" />
+
+                <Button
+                    android:id="@+id/eye_pos_y_mult_minus"
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:text="-"
+                    android:textSize="18sp"
+                    android:layout_marginStart="8dp" />
+
+                <Button
+                    android:id="@+id/eye_pos_y_mult_plus"
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:text="+"
+                    android:textSize="18sp"
+                    android:layout_marginStart="4dp" />
+            </LinearLayout>
+
+            <!-- Distance-Based Range -->
+            <TextView
+                android:id="@+id/settings_distance_range_label"
+                style="@style/SettingsSectionLabelStyle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:text="@string/distance_based_range" />
+
+            <!-- Distance X Multiplier -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:padding="12dp"
+                android:background="@drawable/ripple_background">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="@string/distance_x_multiplier"
+                    android:textSize="14sp" />
+
+                <EditText
+                    android:id="@+id/distance_x_value"
+                    android:layout_width="100dp"
+                    android:layout_height="48dp"
+                    android:text="0.0"
+                    android:textSize="14sp"
+                    android:inputType="numberDecimal|numberSigned"
+                    android:gravity="center"
+                    android:padding="8dp"
+                    android:background="@android:drawable/edit_text"
+                    android:selectAllOnFocus="true" />
+
+                <Button
+                    android:id="@+id/distance_x_minus"
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:text="-"
+                    android:textSize="18sp"
+                    android:layout_marginStart="8dp" />
+
+                <Button
+                    android:id="@+id/distance_x_plus"
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:text="+"
+                    android:textSize="18sp"
+                    android:layout_marginStart="4dp" />
+            </LinearLayout>
+
+            <!-- Distance Y Multiplier -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:padding="12dp"
+                android:background="@drawable/ripple_background">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="@string/distance_y_multiplier"
+                    android:textSize="14sp" />
+
+                <EditText
+                    android:id="@+id/distance_y_value"
+                    android:layout_width="100dp"
+                    android:layout_height="48dp"
+                    android:text="0.0"
+                    android:textSize="14sp"
+                    android:inputType="numberDecimal|numberSigned"
+                    android:gravity="center"
+                    android:padding="8dp"
+                    android:background="@android:drawable/edit_text"
+                    android:selectAllOnFocus="true" />
+
+                <Button
+                    android:id="@+id/distance_y_minus"
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:text="-"
+                    android:textSize="18sp"
+                    android:layout_marginStart="8dp" />
+
+                <Button
+                    android:id="@+id/distance_y_plus"
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:text="+"
+                    android:textSize="18sp"
+                    android:layout_marginStart="4dp" />
+            </LinearLayout>
+
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
