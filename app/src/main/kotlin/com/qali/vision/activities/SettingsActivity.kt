@@ -248,6 +248,8 @@ class SettingsActivity : SimpleActivity() {
 
     private fun setupEyeControlSettings() {
         setupEnableEyeControl()
+        setupEnableClick()
+        setupEnableDrag()
         setupEyeControlSensitivity()
         setupEyeControlSmoothing()
         setupHalfBlinkClickThreshold()
@@ -288,6 +290,22 @@ class SettingsActivity : SimpleActivity() {
                     )
                 }
             }
+        }
+    }
+    
+    private fun setupEnableClick() {
+        binding.settingsEnableClick.isChecked = config.enableClick
+        binding.settingsEnableClickHolder.setOnClickListener {
+            binding.settingsEnableClick.toggle()
+            config.enableClick = binding.settingsEnableClick.isChecked
+        }
+    }
+    
+    private fun setupEnableDrag() {
+        binding.settingsEnableDrag.isChecked = config.enableDrag
+        binding.settingsEnableDragHolder.setOnClickListener {
+            binding.settingsEnableDrag.toggle()
+            config.enableDrag = binding.settingsEnableDrag.isChecked
         }
     }
 
