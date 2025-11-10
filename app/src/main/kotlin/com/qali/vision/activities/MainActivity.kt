@@ -532,8 +532,8 @@ class MainActivity : SimpleActivity(), FlingListener {
         
         val currentTime = System.currentTimeMillis()
         // Get the current pointer position
-        val x = pointerView?.x?.plus(pointerView?.width?.div(2) ?: 0f) ?: dragStartX
-        val y = pointerView?.y?.plus(pointerView?.height?.div(2) ?: 0f) ?: dragStartY
+        val x = (pointerView?.x ?: 0f) + ((pointerView?.width ?: 0) / 2f)
+        val y = (pointerView?.y ?: 0f) + ((pointerView?.height ?: 0) / 2f)
         
         val upEvent = MotionEvent.obtain(
             dragStartTime,
