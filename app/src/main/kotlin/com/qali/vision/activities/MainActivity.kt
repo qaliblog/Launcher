@@ -206,6 +206,49 @@ class MainActivity : SimpleActivity(), FlingListener {
         pointerView = findViewById(R.id.pointer_view)
         
         if (config.eyeControlEnabled) {
+            // Check and request overlay permission if needed
+            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
+                if (!android.provider.Settings.canDrawOverlays(this)) {
+                    val intent = android.content.Intent(
+                        android.provider.Settings.ACTION_MANAGE_OVERLAY_PERMISSION,
+                        android.net.Uri.parse("package:$packageName")
+                    )
+                    startActivity(intent)
+                    toast(R.string.overlay_permission_required_message)
+                }
+            }
+            
+            // Start pointer overlay service for system-wide visibility
+            try {
+                val serviceIntent = android.content.Intent(this, com.qali.vision.services.PointerOverlayService::class.java)
+                if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+                    startForegroundService(serviceIntent)
+                } else {
+                    startService(serviceIntent)
+                }
+                LogcatManager.addLog("PointerOverlayService started", "MainActivity")
+            } catch (e: Exception) {
+                LogcatManager.addLog("Failed to start PointerOverlayService: ${e.message}", "MainActivity")
+            }
+            
+            // Check if accessibility service is enabled
+            val isAccessibilityEnabled = com.qali.vision.services.MouseControlService.isAccessibilityServiceEnabled(this)
+            if (!isAccessibilityEnabled) {
+                // Show a dialog to prompt user to enable accessibility service
+                android.app.AlertDialog.Builder(this)
+                    .setTitle(R.string.accessibility_service_required)
+                    .setMessage(R.string.accessibility_service_required_message)
+                    .setPositiveButton(R.string.open_accessibility_settings) { _, _ ->
+                        val intent = android.content.Intent(android.provider.Settings.ACTION_ACCESSIBILITY_SETTINGS)
+                        startActivity(intent)
+                    }
+                    .setNegativeButton(android.R.string.cancel, null)
+                    .show()
+            } else {
+                // Connect MouseControlService config
+                com.qali.vision.services.MouseControlService.getInstance()?.setConfig(config)
+            }
+            
             overlayView?.visibility = android.view.View.VISIBLE
             pointerView?.visibility = android.view.View.VISIBLE
             
@@ -220,31 +263,49 @@ class MainActivity : SimpleActivity(), FlingListener {
             
             // Set up blink detector callbacks
             eyeBlinkDetector.onTap = { point ->
-                if (config.enableClick) { // Only trigger if click is enabled
+                if (config.enableClick) {
                     runOnUiThread {
-                        pointerView?.indicateClick()
-                        overlayView?.indicateClick()
-                        performClickAt(point.x, point.y)
+                        // Use MouseControlService for system-wide clicks if available, else local
+                        if (isAccessibilityEnabled) {
+                            com.qali.vision.services.MouseControlService.moveCursor(point.x, point.y)
+                            com.qali.vision.services.MouseControlService.performClick()
+                            com.qali.vision.services.PointerOverlayService.indicateClick()
+                        } else {
+                            pointerView?.indicateClick()
+                            overlayView?.indicateClick()
+                            performClickAt(point.x, point.y)
+                        }
                         LogcatManager.addLog("Tap detected at (${point.x}, ${point.y})", "MainActivity")
                     }
                 }
             }
             
             eyeBlinkDetector.onDragStart = { point ->
-                if (config.enableDrag) { // Only trigger if drag is enabled
+                if (config.enableDrag) {
                     runOnUiThread {
-                        pointerView?.indicateDragStart()
-                        performDragStart(point.x, point.y)
+                        if (isAccessibilityEnabled) {
+                            com.qali.vision.services.MouseControlService.moveCursor(point.x, point.y)
+                            com.qali.vision.services.MouseControlService.startDrag()
+                            com.qali.vision.services.PointerOverlayService.indicateDragStart()
+                        } else {
+                            pointerView?.indicateDragStart()
+                            performDragStart(point.x, point.y)
+                        }
                         LogcatManager.addLog("Drag start at (${point.x}, ${point.y})", "MainActivity")
                     }
                 }
             }
             
             eyeBlinkDetector.onDragEnd = {
-                if (config.enableDrag) { // Only trigger if drag is enabled
+                if (config.enableDrag) {
                     runOnUiThread {
-                        pointerView?.indicateDragEnd()
-                        performDragEnd()
+                        if (isAccessibilityEnabled) {
+                            com.qali.vision.services.MouseControlService.endDrag()
+                            com.qali.vision.services.PointerOverlayService.indicateDragEnd()
+                        } else {
+                            pointerView?.indicateDragEnd()
+                            performDragEnd()
+                        }
                         LogcatManager.addLog("Drag end", "MainActivity")
                     }
                 }
@@ -299,6 +360,13 @@ class MainActivity : SimpleActivity(), FlingListener {
                             
                             // Update pointer position
                             runOnUiThread {
+                                // Update system-wide overlay pointer if accessibility service is enabled
+                                if (com.qali.vision.services.MouseControlService.isAccessibilityServiceEnabled(this@MainActivity)) {
+                                    com.qali.vision.services.MouseControlService.moveCursor(adjustedX, adjustedY)
+                                    com.qali.vision.services.PointerOverlayService.updatePointerPosition(adjustedX, adjustedY)
+                                }
+                                
+                                // Always update local pointer
                                 pointerView?.let { view ->
                                     view.x = adjustedX - view.width / 2
                                     view.y = adjustedY - view.height / 2

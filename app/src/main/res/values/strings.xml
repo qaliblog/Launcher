@@ -68,6 +68,14 @@
     <string name="enable_click">Enable Click</string>
     <string name="enable_drag">Enable Drag</string>
     <string name="click_drag_settings">Click &amp; Drag Settings</string>
+    
+    <!-- System-wide accessibility service -->
+    <string name="mouse_control_service_description">Vision Eye Control Service - Enables system-wide eye-controlled mouse cursor and gestures. This service allows you to control your device using eye movements and blinks even when other apps are open.</string>
+    <string name="accessibility_service_required">Accessibility Service Required</string>
+    <string name="accessibility_service_required_message">To enable system-wide pointer and click/drag in other apps, please enable the Vision Eye Control accessibility service in Settings.</string>
+    <string name="open_accessibility_settings">Open Accessibility Settings</string>
+    <string name="overlay_permission_required">Overlay Permission Required</string>
+    <string name="overlay_permission_required_message">To display the pointer on top of other apps, please grant overlay permission.</string>
     <!--
         Haven't found some strings? There's more at
         https://github.com/FossifyOrg/Commons/tree/master/commons/src/main/res
