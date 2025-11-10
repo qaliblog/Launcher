@@ -234,6 +234,7 @@ class MainActivity : SimpleActivity(), FlingListener {
                 if (config.enableDrag) { // Only trigger if drag is enabled
                     runOnUiThread {
                         pointerView?.indicateDragStart()
+                        performDragStart(point.x, point.y)
                         LogcatManager.addLog("Drag start at (${point.x}, ${point.y})", "MainActivity")
                     }
                 }
@@ -243,6 +244,7 @@ class MainActivity : SimpleActivity(), FlingListener {
                 if (config.enableDrag) { // Only trigger if drag is enabled
                     runOnUiThread {
                         pointerView?.indicateDragEnd()
+                        performDragEnd()
                         LogcatManager.addLog("Drag end", "MainActivity")
                     }
                 }
@@ -393,6 +395,10 @@ class MainActivity : SimpleActivity(), FlingListener {
         camera = null
     }
     
+    private var dragStartTime: Long = 0
+    private var dragStartX: Float = 0f
+    private var dragStartY: Float = 0f
+    
     private fun performClickAt(x: Float, y: Float) {
         val downTime = System.currentTimeMillis()
         val eventTime = System.currentTimeMillis()
@@ -418,6 +424,61 @@ class MainActivity : SimpleActivity(), FlingListener {
         )
         dispatchTouchEvent(upEvent)
         upEvent.recycle()
+    }
+    
+    private fun performDragStart(x: Float, y: Float) {
+        dragStartTime = System.currentTimeMillis()
+        dragStartX = x
+        dragStartY = y
+        
+        val downEvent = MotionEvent.obtain(
+            dragStartTime,
+            dragStartTime,
+            MotionEvent.ACTION_DOWN,
+            x,
+            y,
+            0
+        )
+        dispatchTouchEvent(downEvent)
+        downEvent.recycle()
+    }
+    
+    private fun performDragMove(x: Float, y: Float) {
+        if (dragStartTime == 0L) return
+        
+        val currentTime = System.currentTimeMillis()
+        val moveEvent = MotionEvent.obtain(
+            dragStartTime,
+            currentTime,
+            MotionEvent.ACTION_MOVE,
+            x,
+            y,
+            0
+        )
+        dispatchTouchEvent(moveEvent)
+        moveEvent.recycle()
+    }
+    
+    private fun performDragEnd() {
+        if (dragStartTime == 0L) return
+        
+        val currentTime = System.currentTimeMillis()
+        // Get the current pointer position
+        val x = pointerView?.x?.plus(pointerView?.width?.div(2) ?: 0f) ?: dragStartX
+        val y = pointerView?.y?.plus(pointerView?.height?.div(2) ?: 0f) ?: dragStartY
+        
+        val upEvent = MotionEvent.obtain(
+            dragStartTime,
+            currentTime,
+            MotionEvent.ACTION_UP,
+            x,
+            y,
+            0
+        )
+        dispatchTouchEvent(upEvent)
+        upEvent.recycle()
+        
+        dragStartTime = 0L
     }
 
     override fun onNewIntent(intent: Intent) {

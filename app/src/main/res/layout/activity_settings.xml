@@ -312,6 +312,40 @@
 
             </RelativeLayout>
 
+            <!-- Enable Click Toggle -->
+            <RelativeLayout
+                android:id="@+id/settings_enable_click_holder"
+                style="@style/SettingsHolderSwitchStyle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/ripple_background">
+
+                <org.fossify.commons.views.MyMaterialSwitch
+                    android:id="@+id/settings_enable_click"
+                    style="@style/SettingsSwitchStyle"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/enable_click" />
+
+            </RelativeLayout>
+
+            <!-- Enable Drag Toggle -->
+            <RelativeLayout
+                android:id="@+id/settings_enable_drag_holder"
+                style="@style/SettingsHolderSwitchStyle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/ripple_background">
+
+                <org.fossify.commons.views.MyMaterialSwitch
+                    android:id="@+id/settings_enable_drag"
+                    style="@style/SettingsSwitchStyle"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/enable_drag" />
+
+            </RelativeLayout>
+
             <RelativeLayout
                 android:id="@+id/settings_eye_control_sensitivity_holder"
                 style="@style/SettingsHolderTextViewOneLinerStyle"
@@ -360,53 +394,95 @@
 
             </RelativeLayout>
 
-            <RelativeLayout
-                android:id="@+id/settings_half_blink_click_threshold_holder"
-                style="@style/SettingsHolderTextViewOneLinerStyle"
+            <!-- Blink Click Threshold with Increment/Decrement -->
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:padding="12dp"
                 android:background="@drawable/ripple_background">
 
-                <org.fossify.commons.views.MyTextView
-                    android:id="@+id/settings_half_blink_click_threshold_label"
-                    style="@style/SettingsTextLabelStyle"
-                    android:layout_width="wrap_content"
+                <TextView
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:text="@string/half_blink_click_threshold" />
+                    android:layout_weight="1"
+                    android:text="@string/half_blink_click_threshold"
+                    android:textSize="14sp" />
 
-                <org.fossify.commons.views.MyTextView
-                    android:id="@+id/settings_half_blink_click_threshold"
-                    style="@style/SettingsTextValueStyle"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@+id/settings_half_blink_click_threshold_label"
-                    tools:text="0.3" />
+                <EditText
+                    android:id="@+id/blink_click_threshold_value"
+                    android:layout_width="100dp"
+                    android:layout_height="48dp"
+                    android:text="0.30"
+                    android:textSize="14sp"
+                    android:inputType="numberDecimal"
+                    android:gravity="center"
+                    android:padding="8dp"
+                    android:background="@android:drawable/edit_text"
+                    android:selectAllOnFocus="true" />
 
-            </RelativeLayout>
+                <Button
+                    android:id="@+id/blink_click_threshold_minus"
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:text="-"
+                    android:textSize="18sp"
+                    android:layout_marginStart="8dp" />
 
-            <RelativeLayout
-                android:id="@+id/settings_half_blink_drag_threshold_holder"
-                style="@style/SettingsHolderTextViewOneLinerStyle"
+                <Button
+                    android:id="@+id/blink_click_threshold_plus"
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:text="+"
+                    android:textSize="18sp"
+                    android:layout_marginStart="4dp" />
+            </LinearLayout>
+
+            <!-- Blink Drag Threshold with Increment/Decrement -->
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:padding="12dp"
                 android:background="@drawable/ripple_background">
 
-                <org.fossify.commons.views.MyTextView
-                    android:id="@+id/settings_half_blink_drag_threshold_label"
-                    style="@style/SettingsTextLabelStyle"
-                    android:layout_width="wrap_content"
+                <TextView
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:text="@string/half_blink_drag_threshold" />
+                    android:layout_weight="1"
+                    android:text="@string/half_blink_drag_threshold"
+                    android:textSize="14sp" />
 
-                <org.fossify.commons.views.MyTextView
-                    android:id="@+id/settings_half_blink_drag_threshold"
-                    style="@style/SettingsTextValueStyle"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@+id/settings_half_blink_drag_threshold_label"
-                    tools:text="0.4" />
+                <EditText
+                    android:id="@+id/blink_drag_threshold_value"
+                    android:layout_width="100dp"
+                    android:layout_height="48dp"
+                    android:text="0.40"
+                    android:textSize="14sp"
+                    android:inputType="numberDecimal"
+                    android:gravity="center"
+                    android:padding="8dp"
+                    android:background="@android:drawable/edit_text"
+                    android:selectAllOnFocus="true" />
 
-            </RelativeLayout>
+                <Button
+                    android:id="@+id/blink_drag_threshold_minus"
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:text="-"
+                    android:textSize="18sp"
+                    android:layout_marginStart="8dp" />
+
+                <Button
+                    android:id="@+id/blink_drag_threshold_plus"
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:text="+"
+                    android:textSize="18sp"
+                    android:layout_marginStart="4dp" />
+            </LinearLayout>
 
             <RelativeLayout
                 android:id="@+id/settings_cursor_size_holder"

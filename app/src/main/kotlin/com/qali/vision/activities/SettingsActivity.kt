@@ -330,42 +330,56 @@ class SettingsActivity : SimpleActivity() {
     }
 
     private fun setupHalfBlinkClickThreshold() {
-        val currentThreshold = config.halfBlinkClickThreshold
-        binding.settingsHalfBlinkClickThreshold.text = String.format("%.2f", currentThreshold)
-        binding.settingsHalfBlinkClickThresholdHolder.setOnClickListener {
-            val items = ArrayList<RadioItem>()
-            // Increased range: 0.05 to 1.0 (was 0.3 default, now range is 0.05-1.0)
-            for (i in 1..20) {
-                val value = 0.05f + (i - 1) * 0.05f // Range from 0.05 to 1.0
-                items.add(RadioItem(id = i, title = String.format("%.2f", value)))
-            }
-            RadioGroupDialog(this, items, (currentThreshold * 20).toInt()) {
-                val newThreshold = (it as Int) / 20.0f
-                if (currentThreshold != newThreshold) {
-                    config.halfBlinkClickThreshold = newThreshold
-                    setupHalfBlinkClickThreshold()
-                }
-            }
+        // Blink Click Threshold with increment/decrement buttons
+        val clickThresholdValue = findViewById<android.widget.EditText>(R.id.blink_click_threshold_value)
+        val clickThresholdMinus = findViewById<android.widget.Button>(R.id.blink_click_threshold_minus)
+        val clickThresholdPlus = findViewById<android.widget.Button>(R.id.blink_click_threshold_plus)
+        
+        clickThresholdValue?.setText(String.format("%.2f", config.halfBlinkClickThreshold))
+        
+        setupValueEditorDirect(clickThresholdValue,
+            { config.halfBlinkClickThreshold },
+            { config.halfBlinkClickThreshold = it.coerceIn(0.01f, 1.0f) })
+        
+        clickThresholdMinus?.setOnClickListener {
+            clickThresholdValue?.clearFocus()
+            val newValue = (config.halfBlinkClickThreshold - 0.01f).coerceIn(0.01f, 1.0f)
+            config.halfBlinkClickThreshold = newValue
+            clickThresholdValue?.setText(String.format("%.2f", newValue))
+        }
+        
+        clickThresholdPlus?.setOnClickListener {
+            clickThresholdValue?.clearFocus()
+            val newValue = (config.halfBlinkClickThreshold + 0.01f).coerceIn(0.01f, 1.0f)
+            config.halfBlinkClickThreshold = newValue
+            clickThresholdValue?.setText(String.format("%.2f", newValue))
         }
     }
 
     private fun setupHalfBlinkDragThreshold() {
-        val currentThreshold = config.halfBlinkDragThreshold
-        binding.settingsHalfBlinkDragThreshold.text = String.format("%.2f", currentThreshold)
-        binding.settingsHalfBlinkDragThresholdHolder.setOnClickListener {
-            val items = ArrayList<RadioItem>()
-            // Increased range: 0.1 to 1.0 (was 0.4 default, now range is 0.1-1.0)
-            for (i in 1..20) {
-                val value = i / 20.0f
-                items.add(RadioItem(id = i, title = String.format("%.2f", value)))
-            }
-            RadioGroupDialog(this, items, (currentThreshold * 20).toInt()) {
-                val newThreshold = (it as Int) / 20.0f
-                if (currentThreshold != newThreshold) {
-                    config.halfBlinkDragThreshold = newThreshold
-                    setupHalfBlinkDragThreshold()
-                }
-            }
+        // Blink Drag Threshold with increment/decrement buttons
+        val dragThresholdValue = findViewById<android.widget.EditText>(R.id.blink_drag_threshold_value)
+        val dragThresholdMinus = findViewById<android.widget.Button>(R.id.blink_drag_threshold_minus)
+        val dragThresholdPlus = findViewById<android.widget.Button>(R.id.blink_drag_threshold_plus)
+        
+        dragThresholdValue?.setText(String.format("%.2f", config.halfBlinkDragThreshold))
+        
+        setupValueEditorDirect(dragThresholdValue,
+            { config.halfBlinkDragThreshold },
+            { config.halfBlinkDragThreshold = it.coerceIn(0.01f, 1.0f) })
+        
+        dragThresholdMinus?.setOnClickListener {
+            dragThresholdValue?.clearFocus()
+            val newValue = (config.halfBlinkDragThreshold - 0.01f).coerceIn(0.01f, 1.0f)
+            config.halfBlinkDragThreshold = newValue
+            dragThresholdValue?.setText(String.format("%.2f", newValue))
+        }
+        
+        dragThresholdPlus?.setOnClickListener {
+            dragThresholdValue?.clearFocus()
+            val newValue = (config.halfBlinkDragThreshold + 0.01f).coerceIn(0.01f, 1.0f)
+            config.halfBlinkDragThreshold = newValue
+            dragThresholdValue?.setText(String.format("%.2f", newValue))
         }
     }
 
