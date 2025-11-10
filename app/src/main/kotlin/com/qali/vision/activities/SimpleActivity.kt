@@ -1,5 +1,6 @@
 package com.qali.vision.activities
 
+import android.os.Bundle
 import org.fossify.commons.activities.BaseSimpleActivity
 import com.qali.vision.R
 import com.qali.vision.helpers.REPOSITORY_NAME
@@ -30,4 +31,11 @@ open class SimpleActivity : BaseSimpleActivity() {
     override fun getAppLauncherName() = getString(R.string.app_launcher_name)
 
     override fun getRepositoryName() = REPOSITORY_NAME
+    
+    // Override onCreate to prevent parent from calling appLaunched()
+    override fun onCreate(savedInstanceState: Bundle?) {
+        // Set hide_google_relations to true before calling super
+        super.onCreate(savedInstanceState)
+        // Don't call appLaunched() - prevents fake app popup
+    }
 }
