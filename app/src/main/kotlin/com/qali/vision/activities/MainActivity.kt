@@ -42,7 +42,6 @@ import androidx.core.view.isVisible
 import androidx.core.view.iterator
 import androidx.viewbinding.ViewBinding
 import kotlinx.collections.immutable.toImmutableList
-import org.fossify.commons.extensions.appLaunched
 import org.fossify.commons.extensions.beVisible
 import org.fossify.commons.extensions.getContrastColor
 import org.fossify.commons.extensions.getPopupMenuTheme

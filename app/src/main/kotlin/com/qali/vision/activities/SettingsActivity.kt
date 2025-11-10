@@ -70,13 +70,7 @@ class SettingsActivity : SimpleActivity() {
     }
 
     private fun setupOptionsMenu() {
-        binding.settingsToolbar.setOnMenuItemClickListener { menuItem ->
-            when (menuItem.itemId) {
-                R.id.about -> launchAbout()
-                else -> return@setOnMenuItemClickListener false
-            }
-            return@setOnMenuItemClickListener true
-        }
+        // No menu items - About button removed
     }
 
     private fun refreshMenuItems() {
@@ -506,20 +500,7 @@ class SettingsActivity : SimpleActivity() {
         }
     }
 
-    private fun launchAbout() {
-        val licenses = 0L
-        val faqItems = ArrayList<FAQItem>()
-
-        // Removed social links and donation references
-
-        startAboutActivity(
-            appNameId = R.string.app_name,
-            licenseMask = licenses,
-            versionName = BuildConfig.VERSION_NAME,
-            faqItems = faqItems,
-            showFAQBeforeMail = true
-        )
-    }
+    // launchAbout() removed - no Fossify.org or GitHub links
     
     // Advanced Settings with Increment/Decrement Adjusters
     
